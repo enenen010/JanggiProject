@@ -19,14 +19,9 @@ public class Server {
 		//방만들기 
 		Map<String,GRoom> roomMap = new HashMap<String, GRoom>();
 		
-		SQLiteManager sqLiteManager = new SQLiteManager();
+//		SQLiteManager sqLiteManager = new SQLiteManager();
+		MysqlWork mysqlWork = new MysqlWork();
 		
-		sqLiteManager.createNewTable(
-				"CREATE TABLE IF NOT EXISTS user (\n"
-		                + "	id varchar PRIMARY KEY,\n"
-		                + "	pw varchar NOT NULL\n"
-		                + ");"
-		);
 		
 		try {
 			serv=new ServerSocket(29898);
@@ -70,13 +65,14 @@ public class Server {
 								
 								userValues=str.split(":");
 								System.out.println(Arrays.toString(userValues));
-								int accountNumber=-1;
-								String sql="SELECT COUNT(*) AS cnt  FROM user WHERE id= '"+userValues[1]+"' ";
+								long accountNumber=-1;
+								String sql="SELECT COUNT(*) AS cnt  FROM Cuser WHERE id= '"+userValues[1]+"' ";
 								if(userValues[0].equals("login")) {
 									sql+="AND pw='"+userValues[2]+"' ";
 								}
 								
-								accountNumber = sqLiteManager.RowCountSelect(sql);
+//								accountNumber = sqLiteManager.RowCountSelect(sql);
+								accountNumber = (long)mysqlWork.executeQueryOne(sql, 1)[0];
 								
 								
 								if(userValues[0].equals("login")) {
@@ -89,9 +85,10 @@ public class Server {
 									if(accountNumber==1) isLogin=true;
 								}else if(userValues[0].equals("SignUp")){
 									if(accountNumber==0) {
-										sql="insert into user(id,pw)"
+										sql="insert into Cuser(id,pw)"
 											+" values('"+userValues[1]+"','"+userValues[2]+"')";
-										sqLiteManager.insert(sql);
+//										sqLiteManager.insert(sql);
+										mysqlWork.executeUpdate(sql);
 									}
 									pw.println(accountNumber);
 									pw.flush();
