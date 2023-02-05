@@ -115,6 +115,9 @@ public class Client extends Frame{
 					janggiGameFrame.dispose();
 					mainRoomFrame.setVisible(true);
 				}
+				else if(strs[0].equals("gameEnd")) {
+					janggiGameFrame.notationBtn.setEnabled(true);
+				}
 				else if(strs[0].equals("quit")) {
 					quit = true;
 					return;

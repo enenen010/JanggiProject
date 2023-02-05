@@ -16,6 +16,7 @@ public class JanggiGameFrame extends Frame implements ActionListener{
 	JButton startBtn;
 	JButton surrenderBtn;
 	JButton exitBtn;
+	JButton notationBtn;
 	
 	PrintWriter pw=null;
 	GridBagLayout gbl;
@@ -89,9 +90,14 @@ public class JanggiGameFrame extends Frame implements ActionListener{
 		exitBtn = new JButton("나가기");
 		exitBtn.addActionListener(this);
 		
+		notationBtn = new JButton("기보저장");
+		notationBtn.addActionListener(this);
+		notationBtn.setEnabled(false);
+		
 		menuPanel.add(startBtn);
 		menuPanel.add(surrenderBtn);
 		menuPanel.add(exitBtn);
+		menuPanel.add(notationBtn);
 		msgPanel.add(menuPanel,BorderLayout.NORTH);
 		
 		gbl=new GridBagLayout();
@@ -147,11 +153,21 @@ public class JanggiGameFrame extends Frame implements ActionListener{
 			pw.println("first:"+roomID+":"+id+":"+choice);
 			pw.flush();
 			startBtn.setEnabled(false);
+			notationBtn.setEnabled(false);
 			
 		}else if(e.getSource().equals((Object)exitBtn)) {
 			pw.println("roomExit:"+roomID+":"+id);
 			pw.flush();
 			System.out.println("나가기 실행");
+		}
+		else if(e.getSource().equals((Object)notationBtn)) {
+			String title = JOptionPane.showInputDialog("기보 제목을 입력하세요:");
+			if(title==null) {
+				return;
+			}
+			pw.println("saveNotation:"+roomID+":"+id+":"+title+":"+janggiMachine.commadnStack);
+			pw.flush();
+			notationBtn.setEnabled(false);
 		}
 		
 		

@@ -233,7 +233,25 @@ public class Server {
 								}else if(strs[0].equals("win")) {//승리
 									pw.println("win");
 									pw.flush();
-								}else if(strs[0].equals("roomExit")) {//나가기
+								}
+								else if(strs[0].equals("saveNotation")) {//기보저장
+									String id=strs[2];
+									String title = strs[3];
+									String notation = strs[4];
+									
+									String Nkey=id;
+									Nkey+=new SimpleDateFormat("yyyyMMdd").format(new Date());
+									Nkey+=new Date().getTime();
+									
+									String sql="INSERT INTO notation (Nkey, id, notation, title) " + 
+											"VALUES ('"+Nkey+"', '"+id+"', '"+notation+"', '"+title+"')";
+									mysqlWork.executeUpdate(sql);
+									
+									
+									pw.println("saveNotation:");
+									pw.flush();
+								}
+								else if(strs[0].equals("roomExit")) {//나가기
 									String roomID=strs[1];
 									String id=strs[2];
 									
@@ -265,7 +283,10 @@ public class Server {
 									pw.flush();
 									return;
 								}
-								
+								else if(strs[0].equals("gameEnd")) {//종료
+									pw.println("gameEnd");
+									pw.flush();
+								}
 							}
 							
 							

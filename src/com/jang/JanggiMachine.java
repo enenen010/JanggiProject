@@ -41,6 +41,7 @@ public class JanggiMachine implements ActionListener {
 	//전달 커맨드
 	String command="";
 	ArrayList<String> commands;
+	String commadnStack="";
 	
 	
 	public void init() {
@@ -66,6 +67,7 @@ public class JanggiMachine implements ActionListener {
 				this.youCaptiveBtns=new ArrayList<JButton>();
 				command="";
 				commands = new ArrayList<String>();
+				commadnStack="";
 				myAggression=false;
 				youAggression=false;
 				reDraw();
@@ -346,11 +348,15 @@ public class JanggiMachine implements ActionListener {
 				reDraw();
 				JOptionPane.showMessageDialog(null, "상대가 당신의 王을 잡아 당신의 패배입니다..");
 				ButtonEnabled(false);
+				pw.println("gameEnd");
+				pw.flush();
 			}else if(myAggression){//침략을 성공했다.
 				reDraw();
 				JOptionPane.showMessageDialog(null, "침략이 성공했습니다!! 당신의 승리입니다!!");
 				ButtonEnabled(false);
 				pw.println("win");
+				pw.flush();
+				pw.println("gameEnd");
 				pw.flush();
 			}
 		}
@@ -361,6 +367,9 @@ public class JanggiMachine implements ActionListener {
 			youCaptiveList.remove(beforeX);
 		}
 		myTurn=true;
+		this.commadnStack+=numberByY(beforeY)+beforeX+commands[2]
+				         +numberByY(afterY)+afterX+commands[5]+commands[6]+"/";
+		System.out.println(commadnStack);
 		reDraw();
 	}
 
@@ -431,6 +440,7 @@ public class JanggiMachine implements ActionListener {
 				pw.println("game:"+roomID+":"+id+":"+command);
 				pw.flush();
 				myTurn=false;
+				this.commadnStack+=command+"/";
 				//전송 끝
 				
 				//여기에 이기면 해야될 동작 정의
@@ -448,10 +458,14 @@ public class JanggiMachine implements ActionListener {
 					ButtonEnabled(false);
 					pw.println("win");
 					pw.flush();
+					pw.println("gameEnd");
+					pw.flush();
 				}else if(youAggression){//침략을 막지 못했다....
 					reDraw();
 					JOptionPane.showMessageDialog(null, "침략을 막지 못했습니다.. 당신의 패배입니다..");
 					ButtonEnabled(false);
+					pw.println("gameEnd");
+					pw.flush();
 				}
 			}
 			
